@@ -1,7 +1,10 @@
 import { useState } from "react";
 import React from "react";
-
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
+import {  toast } from "react-toastify";
 const Login = () => {
+    const navigate = useNavigate();
     const [form, setForm] = useState({
         email: "",
         password: "",
@@ -13,9 +16,50 @@ const Login = () => {
         setForm((prev) => ({ ...prev, [name]: value }));
       };
     
-      const submitHandler = (event) => {
+      const submitHandler = async (event) => {
         event.preventDefault();
-        console.log(form);
+        try {
+            const response = await axios.post(
+              "http://localhost:8080/api/v1/users/login",
+              form
+            );
+      
+            if (response.data.success == true) {
+              toast.success(response.data.message, {
+                position: "top-center",
+                autoClose: 2000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "light",
+              });
+              navigate("/home");
+            } else {
+              toast.warn(response.data.message, {
+                position: "top-center",
+                autoClose: 2000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "light",
+              });
+            }
+          } catch (error) {
+            toast.error(response.data.message, {
+              position: "top-center",
+              autoClose: 2000,
+              hideProgressBar: false,
+              closeOnClick: true,
+              pauseOnHover: true,
+              draggable: true,
+              progress: undefined,
+              theme: "light",
+            });
+          }
       };
   return (
     <section className="bg-gray-50 dark:bg-gray-900">

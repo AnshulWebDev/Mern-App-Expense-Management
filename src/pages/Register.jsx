@@ -36,6 +36,7 @@ const Register = () => {
           progress: undefined,
           theme: "light",
         });
+        localStorage.setItem('user',JSON.stringify({}))
         navigate("/login");
       } else {
         toast.warn(response.data.message, {
