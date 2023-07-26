@@ -1,24 +1,31 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Layout from "../components/layouts/Layout";
 import { toast } from "react-toastify";
 import Cookies from "js-cookie";
 import axios from "axios";
+import DataTable from "../components/DataTable";
 
 const Homepage = () => {
   const [showModal, setShowModal] = useState(false);
+  const [allTransection, setAllTransection] = useState([]);
 
   const toggleModal = () => {
     setShowModal(!showModal);
   };
 
-  const token=Cookies.get("token")
+  const token = Cookies.get("token");
+
+  const [useToken, setUsetoken] = useState({
+    token: token,
+  });
+  //send all inputs
   const [form, setForm] = useState({
     amount: "",
     category: "",
     refrence: "",
     description: "",
     date: "",
-    token:token,
+    token: token,
   });
 
   const changeHandler = (event) => {
@@ -29,11 +36,12 @@ const Homepage = () => {
   const submitHandler = async (event) => {
     event.preventDefault();
     try {
-      
       const response = await axios.post(
-        "http://localhost:8080/api/v1/users/home/add-transaction",form)
-        // console.log(form)
-      if(response.data.success == true){
+        "http://localhost:8080/api/v1/users/home/add-transaction",
+        form
+      );
+      // console.log(form)
+      if (response.data.succe12343ss == true) {
         toast.success(response.data.message, {
           position: "top-center",
           autoClose: 2000,
@@ -43,11 +51,10 @@ const Homepage = () => {
           draggable: true,
           progress: undefined,
           theme: "colored",
-        }); 
+        });
       }
-      
     } catch (error) {
-      console.log(error)
+      // console.log(error);
       toast.error("something went wrong", {
         position: "top-center",
         autoClose: 2000,
@@ -59,7 +66,35 @@ const Homepage = () => {
         theme: "colored",
       });
     }
-  }
+  };
+
+  //get all transection
+  const getAllTransection = async () => {
+    try {
+      const response = await axios.post(
+        "http://localhost:8080/api/v1/users/home/get-transaction",
+        useToken
+      );
+      const transection = response.data.transections;
+      // console.log("response", transection);
+      setAllTransection(transection);
+      // console.log(allTransection);
+    } catch (error) {
+      toast.error("something went wrong", {
+        position: "top-center",
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: false,
+        pauseOnHover: false,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+      });
+    }
+  };
+  useEffect(() => {
+    getAllTransection();
+  }, []);
   return (
     <Layout>
       <div className=" h-full">
@@ -73,6 +108,9 @@ const Homepage = () => {
             >
               Add New
             </button>
+
+            
+
             {showModal && (
               <div
                 className="fixed top-0 left-0 right-0 z-50 flex items-center justify-center w-full h-full p-2 overflow-x-hidden overflow-y-auto md:inset-0 backdrop-filter backdrop-blur-sm"
@@ -110,7 +148,10 @@ const Homepage = () => {
                       </h3>
                     </div>
                     <div className="p-4">
-                      <form className="p-6 flex flex-col items-center" onSubmit={submitHandler}>
+                      <form
+                        className="p-6 flex flex-col items-center"
+                        onSubmit={submitHandler}
+                      >
                         <div className="mb-2 w-full">
                           <label
                             htmlFor="amount"
@@ -135,7 +176,6 @@ const Homepage = () => {
                             htmlFor="type"
                             className="block mb-2 text-sm font-medium text-gray-900"
                             required=""
-                            
                           >
                             Type
                           </label>
@@ -232,6 +272,8 @@ const Homepage = () => {
             )}
           </div>
         </div>
+        <DataTable data={allTransection}/>
+        
       </div>
     </Layout>
   );

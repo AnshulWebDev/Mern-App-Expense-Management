@@ -2,9 +2,11 @@ const transectionModel = require("../models/transactionModel");
 
 const getAllTransaction = async (req, res) => {
   try {
-    const transections = await transectionModel.find({
-      userid: req.body.userid,
-    });
+    
+     const userid = req.user.id
+    // console.log(userid)
+    const transections = await transectionModel.find({userid:userid});
+    // console.log(transections)
     if (!transections) {
       return res.status(401).json({
         success: false,
@@ -13,9 +15,11 @@ const getAllTransaction = async (req, res) => {
     }
     return res.status(200).json({
       success: true,
+      message:'Success fully get all items',
       transections,
     });
   } catch (error) {
+    console.log(error)
     return res.status(500).json({
       success: false,
       message: "Please try again",
@@ -23,6 +27,7 @@ const getAllTransaction = async (req, res) => {
   }
 };
 
+//addtransection
 const addAllTransaction = async (req, res) => {
   try {
     const { amount, category, refrence, description, date } = req.body;
