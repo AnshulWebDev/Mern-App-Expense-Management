@@ -1,66 +1,77 @@
-import { useState } from "react";
+import { useState,useEffect } from "react";
 import React from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import {  toast } from "react-toastify";
+import { toast } from "react-toastify";
+import Cookies from "js-cookie";
+
 const Login = () => {
-    const navigate = useNavigate();
-    const [form, setForm] = useState({
-        email: "",
-        password: "",
+  const navigate = useNavigate();
+  const [form, setForm] = useState({
+    email: "",
+    password: "",
+  });
+
+  const changeHandler = (event) => {
+    const { name, value } = event.target;
+    setForm((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const submitHandler = async (event) => {
+    event.preventDefault();
+    try {
+      const response = await axios.post(
+        "http://localhost:8080/api/v1/users/login",
+        form
+      );
+
+      if (response.data.success == true) {
+        console.log(response.data);
+        Cookies.set("token", response.data.token, { expires: 1 });
+        toast.success(response.data.message, {
+          position: "top-center",
+          autoClose: 2000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+        });
+        navigate("/");
+      } else {
+        toast.warn(response.data.message, {
+          position: "top-center",
+          autoClose: 2000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+        });
+      }
+    } catch (error) {
+      toast.error(response.data.message, {
+        position: "top-center",
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
       });
-      
-    
-      const changeHandler = (event) => {
-        const { name, value } = event.target;
-        setForm((prev) => ({ ...prev, [name]: value }));
-      };
-    
-      const submitHandler = async (event) => {
-        event.preventDefault();
-        try {
-            const response = await axios.post(
-              "http://localhost:8080/api/v1/users/login",
-              form
-            );
-      
-            if (response.data.success == true) {
-              toast.success(response.data.message, {
-                position: "top-center",
-                autoClose: 2000,
-                hideProgressBar: false,
-                closeOnClick: true,
-                pauseOnHover: true,
-                draggable: true,
-                progress: undefined,
-                theme: "light",
-              });
-              navigate("/home");
-            } else {
-              toast.warn(response.data.message, {
-                position: "top-center",
-                autoClose: 2000,
-                hideProgressBar: false,
-                closeOnClick: true,
-                pauseOnHover: true,
-                draggable: true,
-                progress: undefined,
-                theme: "light",
-              });
-            }
-          } catch (error) {
-            toast.error(response.data.message, {
-              position: "top-center",
-              autoClose: 2000,
-              hideProgressBar: false,
-              closeOnClick: true,
-              pauseOnHover: true,
-              draggable: true,
-              progress: undefined,
-              theme: "light",
-            });
-          }
-      };
+    }
+  };
+
+  //prevent for register
+  useEffect(() => {
+    const token = Cookies.get("token");
+    if (token) {
+      navigate("/");
+    }
+  }, [navigate]);
   return (
     <section className="bg-gray-50 dark:bg-gray-900">
       <div className="flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0">
@@ -108,7 +119,6 @@ const Login = () => {
                   required=""
                   value={form.password}
                   onChange={changeHandler}
-                  
                 />
               </div>
               <div className="flex items-start mb-6">

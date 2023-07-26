@@ -1,7 +1,8 @@
 import axios from "axios";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
+import Cookies from "js-cookie";
 
 const Register = () => {
   const navigate = useNavigate();
@@ -36,7 +37,7 @@ const Register = () => {
           progress: undefined,
           theme: "light",
         });
-        localStorage.setItem('user',JSON.stringify({}))
+        Cookies.set("token", token, { expires: 1 }); 
         navigate("/login");
       } else {
         toast.warn(response.data.message, {
@@ -64,6 +65,13 @@ const Register = () => {
     }
   };
 
+  //prevent for register
+  useEffect(() => {
+    const token = Cookies.get("token");
+    if (token) {
+      navigate("/");
+    }
+  }, [navigate]);
   return (
     <section className="bg-gray-50 dark:bg-gray-900">
       <div className="flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0">

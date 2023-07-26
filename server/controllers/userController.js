@@ -1,6 +1,8 @@
 const userModel = require("../models/userModel");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
+
+//LOGIN
 const loginController = async (req, res) => {
   try {
     const { email, password } = req.body;
@@ -24,16 +26,15 @@ const loginController = async (req, res) => {
       });
     }
 
+    const payload={
+      email:user.email,
+      id:user._id,  
+    }
     // Generate JWT token and Compare Password
     if (await bcrypt.compare(password, user.password)) {
-      const token = jwt.sign(
-        { email: user.email, id: user._id },
-        process.env.JWT_SECRET,
-        {
-          expiresIn: "24h",
-        }
-      );
-        console.log(token)
+      const token = jwt.sign(payload,process.env.JWT_SECRET,{expiresIn: "24h"});
+        // console.log(token)
+        
       // Save token to user document in database
       user.token = token;
       user.password = undefined;
@@ -42,7 +43,7 @@ const loginController = async (req, res) => {
         expires: new Date(Date.now() + 3 * 24 * 60 * 60 * 1000),
         httpOnly: true,
       };
-      res.cookie("token", token, options).json({
+      res.json({
         success: true,
         token,
         user,
@@ -63,6 +64,8 @@ const loginController = async (req, res) => {
   }
 };
 
+
+//SIGNUP
 const registerController = async (req, res) => {
   try {
     const { email, password, confirmPassword } = req.body;
