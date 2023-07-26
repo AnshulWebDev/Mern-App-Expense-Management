@@ -2,8 +2,9 @@ import React from "react";
 import { Link } from "react-router-dom";
 import { useState, useEffect } from "react";
 import Cookies from "js-cookie";
-
+import { useNavigate } from "react-router-dom";
 const Header = () => {
+  const navigate = useNavigate();
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   useEffect(()=>{
@@ -11,20 +12,20 @@ const Header = () => {
     if(user){
       setIsLoggedIn(true)
     }
-  },[])
+  },[]);
+
   const handleLogout = () => {
-    // Perform your logout logic here, e.g., clearing session on the server
-    // Once the logout is successful, set the isLoggedIn state to false
     setIsLoggedIn(false);
     // Remove the user token from the cookies
     Cookies.remove("token");
+    navigate('/')
   };
   return (
     <header>
-      <nav className="bg-white border-gray-200 px-4 lg:px-6 py-2.5 dark:bg-gray-800">
+      <nav className="bg-white border-gray-200 px-4 lg:px-6 py-2.5">
         <div className="flex flex-wrap justify-between items-center mx-auto max-w-screen-xl">
           <Link to={"/"} className="flex items-center">
-            <span className="self-center text-xl font-semibold whitespace-nowrap dark:text-white">
+            <span className="self-center text-xl font-semibold whitespace-nowrap">
               EM
             </span>
           </Link>
@@ -32,14 +33,16 @@ const Header = () => {
             {isLoggedIn ? (
               // User is logged in, show the user dropdown
               <>
+                <Link to={'/user'}>
                 <img
                   className="w-10 h-10 p-1 rounded-full ring-2 ring-gray-300 dark:ring-gray-500"
                   src="https://flowbite.com/docs/images/people/profile-picture-5.jpg"
                   alt="Bordered avatar"
                 />
+                </Link>
                 <button
                 onClick={handleLogout}
-                  className="text-gray-800 dark:text-white hover:bg-gray-50 focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm px-4 ml-1.5 lg:px-4 py-2 lg:py-2.5 mr-2 dark:hover:bg-gray-700 focus:outline-none dark:focus:ring-gray-800"
+                className="text-gray-800 bg-primary-700 focus:outline-none focus:ring focus:ring-red-600 font-medium rounded-lg text-sm px-4 lg:px-5 py-2 lg:py-2.5 mr-2"
                 >
                   Sign out
                 </button>
@@ -49,22 +52,22 @@ const Header = () => {
               <>
                 <Link
                   to={"/login"}
-                  className="text-gray-800 dark:text-white hover:bg-gray-50 focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm px-4 lg:px-5 py-2 lg:py-2.5 mr-2 dark:hover:bg-gray-700 focus:outline-none dark:focus:ring-gray-800"
+                  className="text-gray-800 hover:bg-[#F0483E] focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm px-4 lg:px-5 py-2 lg:py-2.5 mr-2 focus:outline-none"
                 >
                   Log in
                 </Link>
                 <Link
                   to={"/register"}
-                  className="text-white bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 font-medium rounded-lg text-sm px-4 lg:px-5 py-2 lg:py-2.5 mr-2 dark:bg-primary-600 dark:hover:bg-primary-700 focus:outline-none dark:focus:ring-primary-800"
+                  className="text-gray-800 bg-primary-700 focus:outline-none focus:ring focus:ring-red-600 font-medium rounded-lg text-sm px-4 lg:px-5 py-2 lg:py-2.5 mr-2"
                 >
-                  Get started
+                  Sign up
                 </Link>
               </>
             )}
             <button
               data-collapse-toggle="mobile-menu-2"
               type="button"
-              className="inline-flex items-center p-2 ml-1 text-sm text-gray-500 rounded-lg lg:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600"
+              className="inline-flex items-center p-2 ml-1 text-sm text-gray-500 rounded-lg lg:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:focus:ring-gray-600"
               aria-controls="mobile-menu-2"
               aria-expanded="false"
             >
@@ -103,7 +106,7 @@ const Header = () => {
               <li>
                 <Link
                   to={"/"}
-                  className="block py-2 pr-4 pl-3 text-white rounded bg-primary-700 lg:bg-transparent lg:text-primary-700 lg:p-0 dark:text-white"
+                  className="block py-2 pr-4 pl-3 text-black rounded bg-primary-700 lg:bg-transparent lg:text-primary-700 lg:p-0"
                   aria-current="page"
                 >
                   Home
@@ -112,7 +115,7 @@ const Header = () => {
               <li>
                 <Link
                   to={"/"}
-                  className="block py-2 pr-4 pl-3 text-gray-700 border-b border-gray-100 hover:bg-gray-50 lg:hover:bg-transparent lg:border-0 lg:hover:text-primary-700 lg:p-0 dark:text-gray-400 lg:dark:hover:text-white dark:hover:bg-gray-700 dark:hover:text-white lg:dark:hover:bg-transparent dark:border-gray-700"
+                  className="block py-2 pr-4 pl-3 text-gray-500 border-b border-gray-100 hover:text-gray-700 lg:hover:bg-transparent lg:border-0 lg:hover:text-primary-700 lg:p-0"
                 >
                   Company
                 </Link>
@@ -120,7 +123,7 @@ const Header = () => {
               <li>
                 <Link
                   to={"/"}
-                  className="block py-2 pr-4 pl-3 text-gray-700 border-b border-gray-100 hover:bg-gray-50 lg:hover:bg-transparent lg:border-0 lg:hover:text-primary-700 lg:p-0 dark:text-gray-400 lg:dark:hover:text-white dark:hover:bg-gray-700 dark:hover:text-white lg:dark:hover:bg-transparent dark:border-gray-700"
+                  className="block py-2 pr-4 pl-3 text-gray-500 border-b border-gray-100 hover:text-gray-700 lg:hover:bg-transparent lg:border-0 lg:hover:text-primary-700 lg:p-0 "
                 >
                   Marketplace
                 </Link>
@@ -128,7 +131,7 @@ const Header = () => {
               <li>
                 <Link
                   to={"/"}
-                  className="block py-2 pr-4 pl-3 text-gray-700 border-b border-gray-100 hover:bg-gray-50 lg:hover:bg-transparent lg:border-0 lg:hover:text-primary-700 lg:p-0 dark:text-gray-400 lg:dark:hover:text-white dark:hover:bg-gray-700 dark:hover:text-white lg:dark:hover:bg-transparent dark:border-gray-700"
+                  className="block py-2 pr-4 pl-3 text-gray-500 border-b border-gray-100 hover:text-gray-700 lg:hover:bg-transparent lg:border-0 lg:hover:text-primary-700 lg:p-0 "
                 >
                   Features
                 </Link>
@@ -136,7 +139,7 @@ const Header = () => {
               <li>
                 <Link
                   to={"/"}
-                  className="block py-2 pr-4 pl-3 text-gray-700 border-b border-gray-100 hover:bg-gray-50 lg:hover:bg-transparent lg:border-0 lg:hover:text-primary-700 lg:p-0 dark:text-gray-400 lg:dark:hover:text-white dark:hover:bg-gray-700 dark:hover:text-white lg:dark:hover:bg-transparent dark:border-gray-700"
+                  className="block py-2 pr-4 pl-3 text-gray-500 border-b border-gray-100 hover:text-gray-700 lg:hover:bg-transparent lg:border-0 lg:hover:text-primary-700 lg:p-0 "
                 >
                   Team
                 </Link>
@@ -144,7 +147,7 @@ const Header = () => {
               <li>
                 <Link
                   to={"/"}
-                  className="block py-2 pr-4 pl-3 text-gray-700 border-b border-gray-100 hover:bg-gray-50 lg:hover:bg-transparent lg:border-0 lg:hover:text-primary-700 lg:p-0 dark:text-gray-400 lg:dark:hover:text-white dark:hover:bg-gray-700 dark:hover:text-white lg:dark:hover:bg-transparent dark:border-gray-700"
+                  className="block py-2 pr-4 pl-3 text-gray-500 border-b border-gray-100 hover:text-gray-700 lg:hover:bg-transparent lg:border-0 lg:hover:text-primary-700 lg:p-0 "
                 >
                   Contact
                 </Link>
