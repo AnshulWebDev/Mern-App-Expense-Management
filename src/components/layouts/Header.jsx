@@ -3,22 +3,33 @@ import { Link } from "react-router-dom";
 import { useState, useEffect } from "react";
 import Cookies from "js-cookie";
 import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 const Header = () => {
   const navigate = useNavigate();
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
-  useEffect(()=>{
-    const user =Cookies.get("token")
-    if(user){
-      setIsLoggedIn(true)
+  useEffect(() => {
+    const user = Cookies.get("token");
+    if (user) {
+      setIsLoggedIn(true);
     }
-  },[]);
+  }, []);
 
   const handleLogout = () => {
     setIsLoggedIn(false);
     // Remove the user token from the cookies
     Cookies.remove("token");
-    navigate('/')
+    toast.success("Log out successfully", {
+      position: "top-center",
+      autoClose: 2000,
+      hideProgressBar: false,
+      closeOnClick: false,
+      pauseOnHover: false,
+      draggable: true,
+      progress: undefined,
+      theme: "colored",
+    });
+    navigate("/");
   };
   return (
     <header>
@@ -33,16 +44,16 @@ const Header = () => {
             {isLoggedIn ? (
               // User is logged in, show the user dropdown
               <>
-                <Link to={'/user'}>
-                <img
-                  className="w-10 h-10 p-1 rounded-full ring-2 ring-gray-300 dark:ring-gray-500"
-                  src="https://flowbite.com/docs/images/people/profile-picture-5.jpg"
-                  alt="Bordered avatar"
-                />
+                <Link to={"/user"}>
+                  <img
+                    className="w-10 h-10 p-1 rounded-full ring-2 ring-gray-300 dark:ring-gray-500"
+                    src="https://flowbite.com/docs/images/people/profile-picture-5.jpg"
+                    alt="Bordered avatar"
+                  />
                 </Link>
                 <button
-                onClick={handleLogout}
-                className="text-gray-800 bg-primary-700 focus:outline-none focus:ring focus:ring-red-600 font-medium rounded-lg text-sm px-4 lg:px-5 py-2 lg:py-2.5 mr-2"
+                  onClick={handleLogout}
+                  className="text-white bg-red-600 ml-2 hover:bg-red-500 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm px-2 md:px-5 py-2 lg:py-2.5 mr-2 focus:outline-none"
                 >
                   Sign out
                 </button>
@@ -52,7 +63,7 @@ const Header = () => {
               <>
                 <Link
                   to={"/login"}
-                  className="text-gray-800 hover:bg-[#F0483E] focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm px-4 lg:px-5 py-2 lg:py-2.5 mr-2 focus:outline-none"
+                  className="text-gray-800 hover:bg-[#F0483E] focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm px-4 lg:px-5 py-2 lg:py-2.5 mr-2 focus:outline-none"
                 >
                   Log in
                 </Link>
@@ -105,7 +116,7 @@ const Header = () => {
             <ul className="flex flex-col mt-4 font-medium lg:flex-row lg:space-x-8 lg:mt-0">
               <li>
                 <Link
-                  to={"/"}
+                  to={"/home"}
                   className="block py-2 pr-4 pl-3 text-black rounded bg-primary-700 lg:bg-transparent lg:text-primary-700 lg:p-0"
                   aria-current="page"
                 >
@@ -114,7 +125,7 @@ const Header = () => {
               </li>
               <li>
                 <Link
-                  to={"/"}
+                  to={"#"}
                   className="block py-2 pr-4 pl-3 text-gray-500 border-b border-gray-100 hover:text-gray-700 lg:hover:bg-transparent lg:border-0 lg:hover:text-primary-700 lg:p-0"
                 >
                   Company
@@ -122,7 +133,7 @@ const Header = () => {
               </li>
               <li>
                 <Link
-                  to={"/"}
+                  to={"#"}
                   className="block py-2 pr-4 pl-3 text-gray-500 border-b border-gray-100 hover:text-gray-700 lg:hover:bg-transparent lg:border-0 lg:hover:text-primary-700 lg:p-0 "
                 >
                   Marketplace
@@ -130,7 +141,7 @@ const Header = () => {
               </li>
               <li>
                 <Link
-                  to={"/"}
+                  to={"#"}
                   className="block py-2 pr-4 pl-3 text-gray-500 border-b border-gray-100 hover:text-gray-700 lg:hover:bg-transparent lg:border-0 lg:hover:text-primary-700 lg:p-0 "
                 >
                   Features
@@ -138,7 +149,7 @@ const Header = () => {
               </li>
               <li>
                 <Link
-                  to={"/"}
+                  to={"#"}
                   className="block py-2 pr-4 pl-3 text-gray-500 border-b border-gray-100 hover:text-gray-700 lg:hover:bg-transparent lg:border-0 lg:hover:text-primary-700 lg:p-0 "
                 >
                   Team
@@ -146,7 +157,7 @@ const Header = () => {
               </li>
               <li>
                 <Link
-                  to={"/"}
+                  to={"#"}
                   className="block py-2 pr-4 pl-3 text-gray-500 border-b border-gray-100 hover:text-gray-700 lg:hover:bg-transparent lg:border-0 lg:hover:text-primary-700 lg:p-0 "
                 >
                   Contact

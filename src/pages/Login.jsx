@@ -1,7 +1,7 @@
-import { useState,useEffect } from "react";
+import { useState, useEffect } from "react";
 import React from "react";
 import axios from "axios";
-import { useNavigate,Link } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { toast } from "react-toastify";
 import Cookies from "js-cookie";
 
@@ -24,19 +24,21 @@ const Login = () => {
         "http://localhost:8080/api/v1/users/login",
         form
       );
-
+      // console.log(response)
       if (response.data.success == true) {
-        console.log(response.data);
-        Cookies.set("token", response.data.token, { expires: 1 });
+        const { token } = response.data.user;
+        // console.log(token);
+        Cookies.set("token", token, { expires: 1 });
+
         toast.success(response.data.message, {
           position: "top-center",
           autoClose: 2000,
           hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
+          closeOnClick: false,
+          pauseOnHover: false,
           draggable: true,
           progress: undefined,
-          theme: "light",
+          theme: "colored",
         });
         navigate("/home");
       } else {
@@ -44,23 +46,23 @@ const Login = () => {
           position: "top-center",
           autoClose: 2000,
           hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
+          closeOnClick: false,
+          pauseOnHover: false,
           draggable: true,
           progress: undefined,
-          theme: "light",
+          theme: "colored",
         });
       }
     } catch (error) {
-      toast.error(response.data.message, {
+      toast.error("Some thing went wrong", {
         position: "top-center",
         autoClose: 2000,
         hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
+        closeOnClick: false,
+        pauseOnHover: false,
         draggable: true,
         progress: undefined,
-        theme: "light",
+        theme: "colored",
       });
     }
   };
@@ -121,26 +123,10 @@ const Login = () => {
                   onChange={changeHandler}
                 />
               </div>
-              <div className="flex items-start mb-6">
-                <div className="flex items-center h-5">
-                  <input
-                    id="remember"
-                    type="checkbox"
-                    value=""
-                    className="w-4 h-4 border border-gray-300 rounded bg-gray-50 focus:ring-3 focus:ring-blue-300 "
-                    
-                  />
-                </div>
-                <label
-                  htmlFor="remember"
-                  className="ml-2 text-sm font-medium text-gray-900"
-                >
-                  Remember me
-                </label>
-              </div>
+
               <button
                 type="submit"
-                className="text-white bg-red-600 hover:bg-red-700 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center"
+                className="text-white bg-red-600 hover:bg-red-700 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center"
               >
                 Submit
               </button>

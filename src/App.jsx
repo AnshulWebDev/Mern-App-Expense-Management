@@ -3,9 +3,10 @@ import { Route, Routes } from "react-router-dom";
 import Homepage from "./pages/Homepage";
 import Register from "./pages/Register";
 import Login from "./pages/Login";
-import ProtectedRoutes from "./ProtectedRoutes";
+import ProtectedRoutes from "./auth/ProtectedRoutes";
 import NotFoundPage from "./pages/NotFoundPage ";
 import Welcome from "./pages/Welcome";
+
 const App = () => {
   return (
     <>

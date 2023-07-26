@@ -21,7 +21,7 @@ const Welcome = () => {
           <div className="">
             <Link to={'/login'}>
               <button className=" rounded-lg w-56 h-12 text-xl bg-red-600 mb-2 mr-5 text-white hover:shadow-[inset_14rem_0_0_0] hover:shadow-red-500 duration-[300ms,500ms] transition-[color,box-shadow]">
-                Already register?
+                Already register ?
               </button>
             </Link>
             <Link to={'/register'}>

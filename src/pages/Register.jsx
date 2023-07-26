@@ -1,7 +1,7 @@
-import axios from "axios";
+
 import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { ToastContainer, toast } from "react-toastify";
+import { toast } from "react-toastify";
 import Cookies from "js-cookie";
 
 const Register = () => {
@@ -22,7 +22,7 @@ const Register = () => {
     event.preventDefault();
     try {
       const response = await axios.post(
-        "http://localhost:8080/api/v1/users/register",
+        "http://localhost:8080/api/v1/users//home/add-transaction",
         form
       );
 
@@ -31,24 +31,24 @@ const Register = () => {
           position: "top-center",
           autoClose: 2000,
           hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
+          closeOnClick: false,
+          pauseOnHover: false,
           draggable: true,
           progress: undefined,
-          theme: "light",
+          theme: "colored",
         });
-        Cookies.set("token", token, { expires: 1 }); 
+        Cookies.set("token", token, { expires: 1 });
         navigate("/login");
       } else {
         toast.warn(response.data.message, {
           position: "top-center",
           autoClose: 2000,
           hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
+          closeOnClick: false,
+          pauseOnHover: false,
           draggable: true,
           progress: undefined,
-          theme: "light",
+          theme: "colored",
         });
       }
     } catch (error) {
@@ -56,11 +56,11 @@ const Register = () => {
         position: "top-center",
         autoClose: 2000,
         hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
+        closeOnClick: false,
+        pauseOnHover: false,
         draggable: true,
         progress: undefined,
-        theme: "light",
+        theme: "colored",
       });
     }
   };
@@ -95,7 +95,7 @@ const Register = () => {
                   type="email"
                   name="email"
                   id="email"
-                  className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5"
+                  className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-red-600 focus:border-red-600 block w-full p-2.5"
                   placeholder="name@company.com"
                   required=""
                   value={form.email}
@@ -114,7 +114,7 @@ const Register = () => {
                   name="password"
                   id="password"
                   placeholder="••••••••"
-                  className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5"
+                  className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-red-600 focus:border-red-600 block w-full p-2.5"
                   required=""
                   value={form.password}
                   onChange={changeHandler}
@@ -132,7 +132,7 @@ const Register = () => {
                   name="confirmPassword"
                   id="confirmPassword"
                   placeholder="••••••••"
-                  className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5"
+                  className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-red-300 focus:border-red-600 block w-full p-2.5"
                   required=""
                   value={form.confirmPassword}
                   onChange={changeHandler}
@@ -144,16 +144,12 @@ const Register = () => {
                     id="terms"
                     aria-describedby="terms"
                     type="checkbox"
-                    className="w-4 h-4 border border-gray-300 rounded bg-gray-50 focus:ring-3 focus:ring-primary-300"
+                    className="w-4 h-4 border border-gray-300 rounded bg-gray-50 focus:ring-3 focus:ring-red-300"
                     required=""
                   />
                 </div>
                 <div className="ml-3 text-sm">
-                  <label
-                    htmlFor="terms"
-                    className="font-light text-gray-500"
-
-                  >
+                  <label htmlFor="terms" className="font-light text-gray-500">
                     I accept the{" "}
                     <a className="font-medium text-primary-600 hover:underline">
                       Terms and Conditions
@@ -163,7 +159,7 @@ const Register = () => {
               </div>
               <button
                 type="submit"
-                className="w-full text-white bg-red-600 hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800"
+                className="w-full text-white bg-red-600 hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
               >
                 Create an account
               </button>
@@ -172,7 +168,7 @@ const Register = () => {
                 Already have an account?{" "}
                 <Link
                   to={"/login"}
-                  className="font-medium text-primary-600 hover:underline dark:text-primary-500"
+                  className="font-medium text-primary-600 hover:underline"
                 >
                   Login here
                 </Link>

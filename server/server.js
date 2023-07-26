@@ -22,13 +22,17 @@ app.use(express.urlencoded({ extended: true }));
 // CORS middleware
 app.use(
   cors({
-    origin: '*',
+    origin: "*",
     credentials: true, // Enable CORS credentials (cookies)
   })
 );
 app.use(cookieParser());
+
 //routs
 app.use("/api/v1/users", require("./routes/userRoute"));
+app.use("/api/v1/users", require("./routes/transactionRoute"));
+
+
 
 //listine server
 app.listen(PORT, () => {

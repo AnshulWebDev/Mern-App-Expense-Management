@@ -10,7 +10,7 @@ const loginController = async (req, res) => {
     // Check if email or password is missing
     if (!email || !password) {
       // Return 400 Bad Request status code with error message
-      return res.json({
+      return res.status(400).json({
         success: false,
         message: `Please fill all the fields`,
       });
@@ -20,7 +20,7 @@ const loginController = async (req, res) => {
 
     // If user not found with provided email
     if (!user) {
-      return res.json({
+      return res.status(400).json({
         success: false,
         message: "user not registered ",
       });
@@ -43,7 +43,7 @@ const loginController = async (req, res) => {
         expires: new Date(Date.now() + 3 * 24 * 60 * 60 * 1000),
         httpOnly: true,
       };
-      res.json({
+      res.status(200).json({
         success: true,
         token,
         user,
@@ -51,13 +51,13 @@ const loginController = async (req, res) => {
       });
       
     } else {
-      return res.json({
+      return res.status(401).json({
         success: false,
         message: `Password is incorrect`,
       });
     }
   } catch (error) {
-    return res.json({
+    return res.status(500).json({
 			success: false,
 			message: `Login Failure Please Try Again`,
 		});
@@ -71,7 +71,7 @@ const registerController = async (req, res) => {
     const { email, password, confirmPassword } = req.body;
 
     if (!email || !password || !confirmPassword) {
-      return res.json({
+      return res.status(400).json({
         success: false,
         message: "All Fields are required",
       });
@@ -79,7 +79,7 @@ const registerController = async (req, res) => {
 
     // Check if password and confirm password match
     if (password !== confirmPassword) {
-      return res.json({
+      return res.status(401).json({
         success: false,
         message: "Password do not match. Please try again.",
       });
@@ -88,7 +88,7 @@ const registerController = async (req, res) => {
     // Check if user already exists
     const existingUser = await userModel.findOne({ email });
     if (existingUser) {
-      return res.json({
+      return res.status(401).json({
         success: false,
         message: "User already exists. Please sign in to continue.",
       });
