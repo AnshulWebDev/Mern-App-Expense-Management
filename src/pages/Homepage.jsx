@@ -4,25 +4,31 @@ import { toast } from "react-toastify";
 import Cookies from "js-cookie";
 import axios from "axios";
 import DataTable from "../components/DataTable";
-
+import {AiOutlineUnorderedList,AiOutlineAreaChart} from "react-icons/ai"
+import Analytics from "../components/Analytics";
 const Homepage = () => {
+  const token = Cookies.get("token");
   const [showModal, setShowModal] = useState(false);
   const [allTransection, setAllTransection] = useState([]);
+  const [frequency, setFrequency] = useState({
+    frequency: "7",
+    token: token,
+  });
+  const [viewData,setViewData] = useState('table');
 
   const toggleModal = () => {
     setShowModal(!showModal);
   };
 
-  const token = Cookies.get("token");
-
   const [useToken, setUsetoken] = useState({
     token: token,
   });
+
   //send all inputs
   const [form, setForm] = useState({
     amount: "",
-    category: "",
-    refrence: "",
+    category: "salary",
+    refrence: "Income",
     description: "",
     date: "",
     token: token,
@@ -41,7 +47,7 @@ const Homepage = () => {
         form
       );
       // console.log(form)
-      if (response.data.succe12343ss == true) {
+      if (response.data.success == true) {
         toast.success(response.data.message, {
           position: "top-center",
           autoClose: 2000,
@@ -68,38 +74,70 @@ const Homepage = () => {
     }
   };
 
-  //get all transection
-  const getAllTransection = async () => {
-    try {
-      const response = await axios.post(
-        "http://localhost:8080/api/v1/users/home/get-transaction",
-        useToken
-      );
-      const transection = response.data.transections;
-      // console.log("response", transection);
-      setAllTransection(transection);
-      // console.log(allTransection);
-    } catch (error) {
-      toast.error("something went wrong", {
-        position: "top-center",
-        autoClose: 2000,
-        hideProgressBar: false,
-        closeOnClick: false,
-        pauseOnHover: false,
-        draggable: true,
-        progress: undefined,
-        theme: "colored",
-      });
-    }
+  //for frequency filter
+  const frequencychangeHandler = (event) => {
+    const { name, value } = event.target;
+    setFrequency((prev) => ({ ...prev, [name]: value }));
   };
+
+  const submitFrequency = async (event) => {
+    event.preventDefault();
+    // console.log(frequency);
+  };
+
   useEffect(() => {
+    //get all transection
+    const getAllTransection = async () => {
+      try {
+        const response = await axios.post(
+          "http://localhost:8080/api/v1/users/home/get-transaction",
+          frequency
+        );
+        const transection = response.data.transections;
+        // console.log(response)
+        // console.log("response", transection);
+        setAllTransection(transection);
+        // console.log(allTransection);
+      } catch (error) {
+        toast.error(error.message, {
+          position: "top-center",
+          autoClose: 2000,
+          hideProgressBar: false,
+          closeOnClick: false,
+          pauseOnHover: false,
+          draggable: true,
+          progress: undefined,
+          theme: "colored",
+        });
+      }
+    };
     getAllTransection();
-  }, []);
+  }, [frequency]);
   return (
     <Layout>
-      <div className=" h-full">
+      <div className="min-h-screen">
         <div className=" mx-auto max-w-screen-xl flex items-center justify-between px-4 py-5 shadow-md">
-          <div>Range Filter</div>
+          <div>
+            <h6>Select Frequency</h6>
+            <select
+              id="frequency"
+              className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-red-500 focus:border-red-500 block w-full p-2.5"
+              defaultValue="salary"
+              required=""
+              name="frequency"
+              value={frequency.frequency}
+              onChange={frequencychangeHandler}
+              onClick={submitFrequency}
+            >
+              <option value="7">Last 1 Week</option>
+              <option value="30">Last 1 Month</option>
+              <option value="365">Last 1 Year</option>
+            </select>
+          </div>
+          <div className=" flex mx-2 border-2 border-neutral-500 rounded-md px-1.5 py-1">
+            <AiOutlineUnorderedList className={`${viewData==='table'?'text-red-500': 'text-black'} mx-2 text-2xl hover:cursor-pointer`} onClick={()=>setViewData('table')}/>
+            <AiOutlineAreaChart className={`${viewData==='analytics'?'text-red-500': 'text-black'} mx-2 text-2xl hover:cursor-pointer`} onClick={()=>setViewData('analytics')}/>
+          </div>
           <div>
             <button
               type="submit"
@@ -108,9 +146,6 @@ const Homepage = () => {
             >
               Add New
             </button>
-
-            
-
             {showModal && (
               <div
                 className="fixed top-0 left-0 right-0 z-50 flex items-center justify-center w-full h-full p-2 overflow-x-hidden overflow-y-auto md:inset-0 backdrop-filter backdrop-blur-sm"
@@ -182,7 +217,7 @@ const Homepage = () => {
                           <select
                             id="refrence"
                             className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-red-500 focus:border-red-500 block w-full p-2.5"
-                            defaultValue="Choose a type"
+                            defaultValue="Income"
                             required=""
                             name="refrence"
                             value={form.refrence}
@@ -203,7 +238,7 @@ const Homepage = () => {
                           <select
                             id="category"
                             className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-red-500 focus:border-red-500 block w-full p-2.5"
-                            defaultValue="Choose a category"
+                            defaultValue="salary"
                             required=""
                             name="category"
                             value={form.category}
@@ -272,8 +307,9 @@ const Homepage = () => {
             )}
           </div>
         </div>
-        <DataTable data={allTransection}/>
-        
+        {
+          viewData==='table'?(<DataTable data={allTransection} />):(<Analytics data={allTransection}/>)
+        }
       </div>
     </Layout>
   );

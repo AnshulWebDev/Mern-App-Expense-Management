@@ -31,6 +31,11 @@ const Header = () => {
     });
     navigate("/");
   };
+
+  const [openMenu,setOpenMenu]=useState(false)
+  const openMenuHandler=()=>{
+    setOpenMenu((prev)=>!prev);
+  }
   return (
     <header>
       <nav className="bg-white border-gray-200 px-4 lg:px-6 py-2.5">
@@ -76,15 +81,15 @@ const Header = () => {
               </>
             )}
             <button
-              data-collapse-toggle="mobile-menu-2"
-              type="button"
-              className="inline-flex items-center p-2 ml-1 text-sm text-gray-500 rounded-lg lg:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:focus:ring-gray-600"
-              aria-controls="mobile-menu-2"
-              aria-expanded="false"
+               onClick={openMenuHandler}
+               type="button"
+               className="inline-flex items-center p-2 ml-1 text-sm text-gray-500 rounded-lg lg:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200"
+               aria-controls="mobile-menu-2"
+               aria-expanded={openMenu}
             >
               <span className="sr-only">Open main menu</span>
               <svg
-                className="w-6 h-6"
+                className={`w-6 h-6 ${openMenu ? 'hidden' : ''}`}
                 fill="currentColor"
                 viewBox="0 0 20 20"
                 xmlns="http://www.w3.org/2000/svg"
@@ -96,7 +101,7 @@ const Header = () => {
                 ></path>
               </svg>
               <svg
-                className="hidden w-6 h-6"
+                className={`w-6 h-6 ${openMenu ? '' : 'hidden'}`}
                 fill="currentColor"
                 viewBox="0 0 20 20"
                 xmlns="http://www.w3.org/2000/svg"
@@ -110,7 +115,9 @@ const Header = () => {
             </button>
           </div>
           <div
-            className="hidden justify-between items-center w-full lg:flex lg:w-auto lg:order-1"
+            className={`${
+              openMenu ? 'block mt-3 z-50' : 'hidden'
+            } justify-between bg-[#F9FAFB] items-center w-full lg:flex lg:w-auto lg:order-1`}
             id="mobile-menu-2"
           >
             <ul className="flex flex-col mt-4 font-medium lg:flex-row lg:space-x-8 lg:mt-0">
