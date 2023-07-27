@@ -4,7 +4,7 @@ import { toast } from "react-toastify";
 import Cookies from "js-cookie";
 import axios from "axios";
 import DataTable from "../components/DataTable";
-import {AiOutlineUnorderedList,AiOutlineAreaChart} from "react-icons/ai"
+import { AiOutlineUnorderedList, AiOutlineAreaChart } from "react-icons/ai";
 import Analytics from "../components/Analytics";
 const Homepage = () => {
   const token = Cookies.get("token");
@@ -14,7 +14,8 @@ const Homepage = () => {
     frequency: "7",
     token: token,
   });
-  const [viewData,setViewData] = useState('table');
+  console.log(frequency)
+  const [viewData, setViewData] = useState("table");
 
   const toggleModal = () => {
     setShowModal(!showModal);
@@ -44,7 +45,7 @@ const Homepage = () => {
     try {
       const response = await axios.post(
         "http://localhost:8080/api/v1/users/home/add-transaction",
-        form
+      form
       );
       // console.log(form)
       if (response.data.success == true) {
@@ -84,33 +85,32 @@ const Homepage = () => {
     event.preventDefault();
     // console.log(frequency);
   };
-
+  const getAllTransection = async () => {
+    try {
+      const response = await axios.post(
+        "http://localhost:8080/api/v1/users/home/get-transaction",
+        frequency
+      );
+      const transection = response.data.message;
+      // console.log(response)
+      console.log("response", transection);
+      setAllTransection(transection);
+      // console.log(allTransection);
+    } catch (error) {
+      toast.error(error, {
+        position: "top-center",
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: false,
+        pauseOnHover: false,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+      });
+    }
+  };
   useEffect(() => {
     //get all transection
-    const getAllTransection = async () => {
-      try {
-        const response = await axios.post(
-          "http://localhost:8080/api/v1/users/home/get-transaction",
-          frequency
-        );
-        const transection = response.data.transections;
-        // console.log(response)
-        // console.log("response", transection);
-        setAllTransection(transection);
-        // console.log(allTransection);
-      } catch (error) {
-        toast.error(error.message, {
-          position: "top-center",
-          autoClose: 2000,
-          hideProgressBar: false,
-          closeOnClick: false,
-          pauseOnHover: false,
-          draggable: true,
-          progress: undefined,
-          theme: "colored",
-        });
-      }
-    };
     getAllTransection();
   }, [frequency]);
   return (
@@ -122,7 +122,7 @@ const Homepage = () => {
             <select
               id="frequency"
               className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-red-500 focus:border-red-500 block w-full p-2.5"
-              defaultValue="salary"
+              defaultValue="7"
               required=""
               name="frequency"
               value={frequency.frequency}
@@ -134,14 +134,24 @@ const Homepage = () => {
               <option value="365">Last 1 Year</option>
             </select>
           </div>
-          <div className=" flex mx-2 border-2 border-neutral-500 rounded-md px-1.5 py-1">
-            <AiOutlineUnorderedList className={`${viewData==='table'?'text-red-500': 'text-black'} mx-2 text-2xl hover:cursor-pointer`} onClick={()=>setViewData('table')}/>
-            <AiOutlineAreaChart className={`${viewData==='analytics'?'text-red-500': 'text-black'} mx-2 text-2xl hover:cursor-pointer`} onClick={()=>setViewData('analytics')}/>
+          <div className=" flex mx-2 border-2 border-neutral-500 rounded-md px-0.5 py-1">
+            <AiOutlineUnorderedList
+              className={`${
+                viewData === "table" ? "text-red-500" : "text-black"
+              } mx-2 text-2xl hover:cursor-pointer`}
+              onClick={() => setViewData("table")}
+            />
+            <AiOutlineAreaChart
+              className={`${
+                viewData === "analytics" ? "text-red-500" : "text-black"
+              } mx-2 text-2xl hover:cursor-pointer`}
+              onClick={() => setViewData("analytics")}
+            />
           </div>
           <div>
             <button
               type="submit"
-              className="text-white bg-red-600 hover:bg-red-500 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm md:px-5 md:py-2.5 sm:px-4 sm:py-3 px-3 py-2 text-center"
+              className="text-white bg-red-600 hover:bg-red-500 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm md:px-5 md:py-2.5 sm:px-4 sm:py-3 px-[5px] py-2 text-center"
               onClick={toggleModal}
             >
               Add New
@@ -260,13 +270,13 @@ const Homepage = () => {
                             htmlFor="date"
                             className="block mb-2 text-sm font-medium text-gray-900 "
                           >
-                            Amount
+                            Date
                           </label>
                           <input
                             type="date"
                             id="date"
                             className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-red-500 focus:border-red-500 block w-full p-2.5 "
-                            placeholder="Enter amount"
+                            placeholder="Enter date"
                             required=""
                             name="date"
                             value={form.date}
@@ -307,9 +317,11 @@ const Homepage = () => {
             )}
           </div>
         </div>
-        {
-          viewData==='table'?(<DataTable data={allTransection} />):(<Analytics data={allTransection}/>)
-        }
+        {viewData === "table" ? (
+          <DataTable data={allTransection} />
+        ) : (
+          <Analytics data={allTransection} />
+        )}
       </div>
     </Layout>
   );

@@ -32,9 +32,9 @@ const DataTable = ({data}) => {
                 {item.date}
               </th>
               <td className="px-6 py-4">{item.amount}</td>
-              <td className="px-6 py-4">{item.type}</td>
-              <td className="px-6 py-4">{item.category}</td>
               <td className="px-6 py-4">{item.refrence}</td>
+              <td className="px-6 py-4">{item.category}</td>
+              <td className="px-6 py-4">{item.description}</td>
             </tr>
           ))}
         </tbody>

@@ -79,7 +79,7 @@ const registerController = async (req, res) => {
 
     // Check if password and confirm password match
     if (password !== confirmPassword) {
-      return res.status(401).json({
+      return res.json({
         success: false,
         message: "Password do not match. Please try again.",
       });
@@ -88,7 +88,7 @@ const registerController = async (req, res) => {
     // Check if user already exists
     const existingUser = await userModel.findOne({ email });
     if (existingUser) {
-      return res.status(401).json({
+      return res.json({
         success: false,
         message: "User already exists. Please sign in to continue.",
       });
@@ -102,7 +102,7 @@ const registerController = async (req, res) => {
       password: hashPassword,
     });
 
-    return res.status(200).json({
+    return res.json({
       success: true,
       message: "Register successfully",
     });

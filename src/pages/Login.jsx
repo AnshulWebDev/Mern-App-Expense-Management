@@ -16,12 +16,12 @@ const Login = () => {
     const { name, value } = event.target;
     setForm((prev) => ({ ...prev, [name]: value }));
   };
-
+  const LoginApi=import.meta.env.VITE_REACT_APP_LOGIN
   const submitHandler = async (event) => {
     event.preventDefault();
     try {
       const response = await axios.post(
-        "http://localhost:8080/api/v1/users/login",
+        LoginApi,
         form
       );
       // console.log(response)

@@ -3,12 +3,12 @@ const moment = require("moment");
 const getAllTransaction = async (req, res) => {
   try {
     const frequency = req.body.frequency;
-    // console.log("this is frequency", frequency);
+    console.log("this is frequency", frequency);
     const userid = req.user.id;
-    // console.log("this is user id ", userid);
+    console.log("this is user id ", userid);
     const transections = await transectionModel.find({ userid: userid });
-    // console.log("this is transection", transections);
-    if (!transections || transections.length === 0) {
+    console.log("this is transection", transections);
+    if (!transections) {
       return res.status(401).json({
         success: false,
         message: "No transection found",
@@ -27,6 +27,7 @@ const getAllTransaction = async (req, res) => {
         message: "No transactions found within the specified frequency",
       });
     }
+    console.log("this is filteredTransection",filteredTransactions)
     return res.status(200).json({
       success: true,
       message: "Success fully get all items",

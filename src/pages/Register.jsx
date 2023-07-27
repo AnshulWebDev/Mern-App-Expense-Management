@@ -1,10 +1,11 @@
-
+import axios from "axios";
 import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import Cookies from "js-cookie";
 
 const Register = () => {
+
   const navigate = useNavigate();
 
   const [form, setForm] = useState({
@@ -17,15 +18,13 @@ const Register = () => {
     const { name, value } = event.target;
     setForm((prev) => ({ ...prev, [name]: value }));
   };
-
+  const registerAPI=import.meta.env.VITE_REACT_APP_REGISTER
   const submitHandler = async (event) => {
-    event.preventDefault();
+    event.preventDefault()
+    
     try {
-      const response = await axios.post(
-        "http://localhost:8080/api/v1/users//home/add-transaction",
-        form
-      );
-
+      const response = await axios.post(registerAPI,form)
+      console.log(response);
       if (response.data.success == true) {
         toast.success(response.data.message, {
           position: "top-center",
@@ -37,7 +36,7 @@ const Register = () => {
           progress: undefined,
           theme: "colored",
         });
-        Cookies.set("token", token, { expires: 1 });
+        // Cookies.set("token", token, { expires: 1 });
         navigate("/login");
       } else {
         toast.warn(response.data.message, {
@@ -52,7 +51,8 @@ const Register = () => {
         });
       }
     } catch (error) {
-      toast.error(response.data.message, {
+      console.log(error)
+      toast.error("Somethingwent Please try again later", {
         position: "top-center",
         autoClose: 2000,
         hideProgressBar: false,
